@@ -2,22 +2,23 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
+	"os"
+	"testing"
 	"time"
 
 	_ "github.com/lib/pq"
 )
 
-func main() {
-	db, err := sql.Open("postgres", "postgres://ulule:ulule@localhost:35432/ulule?sslmode=disable")
+func TestMain(t *testing.T) {
+	t.Log(os.Getenv("DATABASE_URL"))
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 	row := db.QueryRow("select now();")
 	var now time.Time
 	if err := row.Scan(&now); err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
-	fmt.Println(now)
+	t.Log(now)
 }

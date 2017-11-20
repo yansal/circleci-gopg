@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9
+      - image: postgres:9.6
+    working_directory: /go/src/github.com/yansal/circleci-gopg
+    steps:
+      - checkout
+      - run:
+          command: sudo apt-get update -qq && sudo apt-get install -y postgresql
+      - run: psql -c "select now();"
+      # - run:
+      #     command: go test -v
+      #     environment:
+      #       DATABASE_URL: "postgres://ubuntu:@localhost:5432/db_name"
